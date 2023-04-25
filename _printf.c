@@ -84,7 +84,7 @@ int _printf(const char *frmt, ...)
 		{
 			if (*frmt != ' ')
 			{
-				percentage_handler(frmt, ap);
+				cnt += percentage_handler(frmt, ap);
 				prv_percent = 0;
 			}
 		}
