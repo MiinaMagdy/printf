@@ -1,4 +1,6 @@
 #include <stdarg.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "main.h"
 
 /**
@@ -42,6 +44,7 @@ int _printf(const char *frmt, ...)
 	int cnt = 0;
 	int prv_percent = 0;
 	char *s, c;
+    /* int d; */
 	va_list ap;
 
 	va_start(ap, frmt);
@@ -61,6 +64,14 @@ int _printf(const char *frmt, ...)
 					c = (char)va_arg(ap, int);
 					cnt += write(1, &c, 1);
 					break;
+/*                 case 'i':
+                case 'd':
+                    d = va_arg(ap, int);
+                    itoa(d, s, 10);
+                    cnt += write(1, &s, strlen(s));
+                    break */
+                default:
+                    cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);
 				}
             }
             else if (*frmt == '%')
