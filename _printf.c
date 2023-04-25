@@ -32,6 +32,39 @@ int isdigit(int ch)
 }
 
 /**
+ * percentage_handler - handles if the prviouse is percentage char
+ * @frmt: the formated string
+ * @ap: variable list
+ *
+ * Return: the cnt of chars printed
+ */
+int percentage_handler(const char *frmt, va_list ap)
+{
+	char *s, c;
+	int cnt = 0;
+
+	if (isalpha(*frmt))
+	{
+		switch (*frmt)
+		{
+			case 's':
+				s = va_arg(ap, char *);
+				cnt += write(1, s, strlen(s));
+				break;
+			case 'c':
+				c = (char)va_arg(ap, int);
+				cnt += write(1, &c, 1);
+				break;
+			default:
+				cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);
+		}
+	}
+	else if (*frmt == '%')
+		cnt += write(1, "%%", 1);
+	return (cnt);
+}
+
+/**
  * _printf - prints formatted output to stdout
  *
  * @frmt: format string
@@ -41,49 +74,26 @@ int isdigit(int ch)
  */
 int _printf(const char *frmt, ...)
 {
-	int cnt = 0;
-	int prv_percent = 0;
-	char *s, c;
-    /* int d; */
 	va_list ap;
+	int cnt = 0, prv_percent = 0;
 
 	va_start(ap, frmt);
 	while (*frmt)
 	{
-        if (prv_percent)
-        {
-            if (isalpha(*frmt))
-            {
-                switch (*frmt)
-				{
-				case 's':
-					s = va_arg(ap, char *);
-					cnt += write(1, s, strlen(s));
-					break;
-				case 'c':
-					c = (char)va_arg(ap, int);
-					cnt += write(1, &c, 1);
-					break;
-/*                 case 'i':
-                case 'd':
-                    d = va_arg(ap, int);
-                    itoa(d, s, 10);
-                    cnt += write(1, &s, strlen(s));
-                    break */
-                default:
-                    cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);
-				}
-            }
-            else if (*frmt == '%')
-                cnt += write(1, "%%", 1);
-            prv_percent = 0;
-        }
+		if (prv_percent)
+		{
+			if (*frmt != ' ')
+			{
+				percentage_handler(frmt, ap);
+				prv_percent = 0;
+			}
+		}
 		else
-        {
-            if (*frmt == '%')
-                prv_percent = 1;
-            else
-                cnt += write(1, frmt, 1);
+		{
+			if (*frmt == '%')
+				prv_percent = 1;
+			else
+				cnt += write(1, frmt, 1);
 		}
 		frmt++;
 	}
