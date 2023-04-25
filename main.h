@@ -7,6 +7,10 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+int isdigit(int ch);
+int isalpha(int ch);
+int write_int(int d);
+int percentage_handler(const char *frmt, va_list ap);
 int _printf(const char *format, ...);
 
 #endif
