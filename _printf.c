@@ -32,7 +32,33 @@ int isdigit(int ch)
 }
 
 /**
+ * write_int - write integer
+ *
+ * @d: the integer
+ *
+ * Return: the cnt of chars printed
+ */
+int write_int(int d)
+{
+	char c;
+	int cnt = 0;
+
+	if (d == 0)
+		return (write(1, "0", 1));
+	if (d < 10)
+	{
+		c = d + '0';
+		return (write(1, &c, 1));
+	}
+	cnt += write_int(d / 10);
+	c = d % 10 + '0';
+	cnt += write(1, &c, 1);
+	return (cnt);
+}
+
+/**
  * percentage_handler - handles if the prviouse is percentage char
+ *
  * @frmt: the formated string
  * @ap: variable list
  *
@@ -41,7 +67,7 @@ int isdigit(int ch)
 int percentage_handler(const char *frmt, va_list ap)
 {
 	char *s, c;
-	int cnt = 0;
+	int cnt = 0, d;
 
 	if (isalpha(*frmt))
 	{
@@ -54,6 +80,13 @@ int percentage_handler(const char *frmt, va_list ap)
 			case 'c':
 				c = (char)va_arg(ap, int);
 				cnt += write(1, &c, 1);
+				break;
+			case 'd':
+			case 'i':
+				d = va_arg(ap, int);
+				if (d < 0)
+					cnt += write(1, "-", 1), d *= -1;
+				cnt += write_int(d);
 				break;
 			default:
 				cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);
