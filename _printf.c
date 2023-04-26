@@ -18,20 +18,6 @@ int isalpha(int ch)
 }
 
 /**
- * isdigit - checks whether a character is a digit
- *
- * @ch: character to check
- *
- * Return: 1 if @ch is a digit, 0 otherwise
- */
-int isdigit(int ch)
-{
-	if ('0' <= ch && ch <= '9')
-		return (1);
-	return (0);
-}
-
-/**
  * write_int - write integer
  *
  * @d: the integer
@@ -39,12 +25,28 @@ int isdigit(int ch)
  *
  * Return: the cnt of chars printed
  */
-int write_int(int d, char ch)
+int write_int(long int d, char ch)
 {
 	char c[30], sf[3];
 
 	sf[0] = '%', sf[1] = ch, sf[2] = '\0';
 	sprintf(c, sf, d);
+	return (write(1, c, strlen(c)));
+}
+
+/**
+ * write_pointer - write pointer
+ *
+ * @p: the pointer
+ *
+ * Return: the cnt of chars printed
+ */
+int write_pointer(void *p)
+{
+	char c[30], sf[3];
+
+	sf[0] = '%', sf[1] = 'p', sf[2] = '\0';
+	sprintf(c, sf, p);
 	return (write(1, c, strlen(c)));
 }
 
@@ -59,7 +61,9 @@ int write_int(int d, char ch)
 int percentage_handler(const char *frmt, va_list ap)
 {
 	char *s, c;
-	int cnt = 0, d;
+	int cnt = 0;
+	long int d;
+	void *p;
 
 	if (isalpha(*frmt))
 	{
@@ -75,15 +79,13 @@ int percentage_handler(const char *frmt, va_list ap)
 				c = (char)va_arg(ap, int);
 				cnt += write(1, &c, 1);
 				break;
-			case 'd':
-			case 'i':
-			case 'u':
-			case 'x':
-			case 'X':
-			case 'o':
-			case 'b':
+			case 'd': case 'i': case 'u': case 'x': case 'X': case 'o': case 'b':
 				d = va_arg(ap, int);
 				cnt += write_int(d, *frmt);
+				break;
+			case 'p':
+				p = va_arg(ap, void *);
+				cnt += write_pointer(p);
 				break;
 			default:
 				cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);

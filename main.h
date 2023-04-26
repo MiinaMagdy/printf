@@ -7,9 +7,9 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-int isdigit(int ch);
 int isalpha(int ch);
-int write_int(int d, char ch);
+int write_int(long int d, char ch);
+int write_pointer(void *p);
 int percentage_handler(const char *frmt, va_list ap);
 int _printf(const char *format, ...);
 
