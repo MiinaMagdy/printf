@@ -35,6 +35,7 @@ int isdigit(int ch)
  * write_int - write integer
  *
  * @d: the integer
+ * @ch: the format char
  *
  * Return: the cnt of chars printed
  */
