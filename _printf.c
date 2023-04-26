@@ -75,6 +75,8 @@ int percentage_handler(const char *frmt, va_list ap)
 		{
 			case 's':
 				s = va_arg(ap, char *);
+				if (s == NULL)
+					s = "(null)";
 				cnt += write(1, s, strlen(s));
 				break;
 			case 'c':
@@ -94,6 +96,8 @@ int percentage_handler(const char *frmt, va_list ap)
 	}
 	else if (*frmt == '%')
 		cnt += write(1, "%%", 1);
+	else
+		cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);
 	return (cnt);
 }
 
@@ -111,7 +115,7 @@ int _printf(const char *frmt, ...)
 	int cnt = 0, prv_percent = 0;
 
 	va_start(ap, frmt);
-	while (*frmt)
+	while (frmt && *frmt)
 	{
 		if (prv_percent)
 		{
