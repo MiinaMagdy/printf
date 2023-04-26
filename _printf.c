@@ -109,8 +109,6 @@ int _printf(const char *frmt, ...)
 	va_list ap;
 	int cnt = 0, prv_percent = 0;
 
-	if (frmt == NULL)
-		return (-1);
 	va_start(ap, frmt);
 	while (*frmt)
 	{
@@ -131,6 +129,8 @@ int _printf(const char *frmt, ...)
 		}
 		frmt++;
 	}
+	if (prv_percent)
+		return (-1);
 	va_end(ap);
 	return (cnt);
 }
