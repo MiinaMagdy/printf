@@ -110,6 +110,8 @@ int _printf(const char *frmt, ...)
 	int cnt = 0, prv_percent = 0;
 
 	va_start(ap, frmt);
+	if (frmt == NULL)
+		return (-1);
 	while (*frmt)
 	{
 		if (prv_percent)
