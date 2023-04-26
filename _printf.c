@@ -130,7 +130,6 @@ int _printf(const char *frmt, ...)
 		}
 		frmt++;
 	}
-	printf("cnt = %d", cnt);
 	va_end(ap);
 	return (cnt);
 }
