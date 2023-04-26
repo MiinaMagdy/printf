@@ -40,8 +40,8 @@ int isdigit(int ch)
  */
 int write_int(int d, char ch)
 {
-	char c[30];
-	char sf[3];
+	char c[30], sf[3];
+
 	sf[0] = '%', sf[1] = ch, sf[2] = '\0';
 	sprintf(c, sf, d);
 	return (write(1, c, strlen(c)));
@@ -111,7 +111,7 @@ int _printf(const char *frmt, ...)
 	if (frmt == NULL)
 		return (-1);
 	va_start(ap, frmt);
-	while (frmt && *frmt)
+	while (*frmt)
 	{
 		if (prv_percent)
 		{
