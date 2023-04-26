@@ -9,7 +9,7 @@
 
 int isdigit(int ch);
 int isalpha(int ch);
-int write_int(int d);
+int write_int(int d, char ch);
 int percentage_handler(const char *frmt, va_list ap);
 int _printf(const char *format, ...);
 

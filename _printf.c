@@ -38,11 +38,12 @@ int isdigit(int ch)
  *
  * Return: the cnt of chars printed
  */
-int write_int(int d)
+int write_int(int d, char ch)
 {
 	char c[30];
-
-	sprintf(c, "%d", d);
+	char sf[3];
+	sf[0] = '%', sf[1] = ch, sf[2] = '\0';
+	sprintf(c, sf, d);
 	return (write(1, c, strlen(c)));
 }
 
@@ -75,8 +76,13 @@ int percentage_handler(const char *frmt, va_list ap)
 				break;
 			case 'd':
 			case 'i':
+			case 'u':
+			case 'x':
+			case 'X':
+			case 'o':
+			case 'b':
 				d = va_arg(ap, int);
-				cnt += write_int(d);
+				cnt += write_int(d, *frmt);
 				break;
 			default:
 				cnt += write(1, "%%", 1), cnt += write(1, frmt, 1);
@@ -102,6 +108,8 @@ int _printf(const char *frmt, ...)
 	va_list ap;
 	int cnt = 0, prv_percent = 0;
 
+	if (frmt == NULL)
+		return (-1);
 	va_start(ap, frmt);
 	while (frmt && *frmt)
 	{
@@ -122,6 +130,7 @@ int _printf(const char *frmt, ...)
 		}
 		frmt++;
 	}
+	printf("cnt = %d", cnt);
 	va_end(ap);
 	return (cnt);
 }
