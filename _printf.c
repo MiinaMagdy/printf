@@ -40,20 +40,10 @@ int isdigit(int ch)
  */
 int write_int(int d)
 {
-	char c;
-	int cnt = 0;
+	char c[30];
 
-	if (d == 0)
-		return (write(1, "0", 1));
-	if (d < 10)
-	{
-		c = d + '0';
-		return (write(1, &c, 1));
-	}
-	cnt += write_int(d / 10);
-	c = d % 10 + '0';
-	cnt += write(1, &c, 1);
-	return (cnt);
+	sprintf(c, "%d", d);
+	return (write(1, c, strlen(c)));
 }
 
 /**
@@ -86,8 +76,6 @@ int percentage_handler(const char *frmt, va_list ap)
 			case 'd':
 			case 'i':
 				d = va_arg(ap, int);
-				if (d < 0)
-					cnt += write(1, "-", 1), d *= -1;
 				cnt += write_int(d);
 				break;
 			default:
